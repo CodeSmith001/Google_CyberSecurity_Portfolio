@@ -30,5 +30,7 @@ The completed audit checklist provided a clear, documented overview of Botium To
 
 ## 📁 Files Included
 *   `[Controls-and-compliance-checklist.pdf]` - The completed Internal Audit Controls and Compliance Checklist.
+*   `[Botium-Toys-Scope-goals-and-risk-assessment-report.pdf]` - The provided asset scope and goals.
 
-*(Note: This activity was completed as part of the Google Cybersecurity Professional Certificate).*
+
+
