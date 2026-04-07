@@ -1,41 +1,33 @@
-# Portfolio Activity: Wazuh SIEM Deployment and Log Ingestion
+# Portfolio Activity: Wazuh SIEM Deployment and Advanced Log Ingestion
 
 ## 📝 Objective
-The objective of this project was to build a fully functional Security Information and Event Management (SIEM) lab environment from the ground up using the open-source platform, Wazuh. This involved deploying the SIEM on a local virtual machine, troubleshooting host system incompatibilities, configuring a data ingestion pipeline, and successfully loading a sample dataset for analysis.
+The objective of this project was to deploy a local Security Information and Event Management (SIEM) environment using Wazuh. This project demonstrated full-stack technical competency, including virtualization management, network-based file transfer, Linux system administration, and the resolution of complex software-kernel conflicts.
 
 ## 🛠️ Skills Demonstrated
-- **SIEM Deployment:** Wazuh
-- **Virtualization:** Oracle VirtualBox
-- **Linux System Administration:** Command Line Interface (CLI), Permissions
-- **Technical Troubleshooting:** Kernel Module Management (DKMS), Graphics Controller Configuration
-- **Log Ingestion & Parsing:** Filebeat, YAML Configuration
-- **Network & System Configuration**
+- **SIEM Platform:** Wazuh (OpenSearch-based)
+- **Virtualization:** VMware Workstation
+- **Network Services:** Python HTTP Server, SSH, `wget`
+- **Linux Security:** Troubleshooting Seccomp (Secure Computing Mode)
+- **Data Engineering:** Filebeat, YAML Configuration, Index Pattern Management
+- **Troubleshooting:** Identifying and bypassing kernel-level syscall conflicts
 
-## 🏢 Scenario: Building a Personal Security Lab
+## 🏢 Scenario: SIEM Infrastructure Engineering
 **Situation:** 
-To gain practical, hands-on experience in threat detection and log analysis, I needed a robust SIEM environment. Commercial SIEMs have restrictive trial periods, so I chose the powerful, open-source platform Wazuh to build my own security analysis lab.
+To practice high-volume log analysis, I needed to ingest a dataset of over 100,000 logs into a Wazuh SIEM. The standard ingestion methods faced hypervisor-level constraints and security policy conflicts within the virtualized environment.
 
 **Task:** 
-My task was to deploy the official Wazuh OVA appliance in VirtualBox on my Zen Linux host machine. I needed to configure the virtual machine, ingest a provided `tutorialdata.zip` dataset, and verify that the logs were successfully parsed and searchable within the Wazuh dashboard.
+My task was to deploy the Wazuh OVA on VMware, securely transfer 100k+ logs from the host to the guest VM using a Python-based web server, and configure a Filebeat pipeline that could bypass security-call (seccomp) crashes common on custom Linux kernels.
 
 ## 🚀 Action Taken
-I executed the project in four distinct phases: deployment, troubleshooting, data ingestion, and verification.
+1. **Infrastructure Setup:** Imported the Wazuh appliance into VMware and configured network connectivity. I used `ssh` to manage the VM remotely for better workflow efficiency.
+2. **Network Data Transfer:** Rather than using traditional shared folders, I hosted a **Python HTTP server** on my host machine and utilized `wget` on the VM to pull the `tdata.zip` file across the local network.
+3. **Pipeline Configuration & Troubleshooting:** I authored a custom `ingest.yml` for Filebeat. Critically, I diagnosed a `SIGABRT` crash caused by a conflict between the Go-based Filebeat runtime and the host's Zen Linux kernel. I resolved this by explicitly disabling **seccomp** (`seccomp.enabled: false`) in the configuration.
+4. **Data Management:** I manually created the `filebeat-*` index pattern within the Wazuh Management dashboard to map the raw Elasticsearch data to the OpenSearch-based UI.
 
-1.  **Initial Deployment:** I imported the Wazuh `.ova` file into VirtualBox and configured the virtual machine settings, critically assigning it **4096 MB (4 GB) of RAM** to ensure stable operation.
-
-2.  **Host System Troubleshooting:** Upon first boot, I encountered a `VERR_SUPDRV_COMPONENT_NOT_FOUND` error. I identified this as a kernel module incompatibility between VirtualBox and my host system's **Zen kernel**. I resolved this by:
-    *   Installing the specific kernel headers for my running kernel:
-        `sudo pacman -S linux-zen-headers`
-    *   Ensuring the DKMS host modules were installed to allow for on-the-fly driver compilation:
-        `sudo pacman -S virtualbox-host-dkms`
-    *   Rebuilding the kernel modules to align with my system:
-        `sudo dkms autoinstall`
-
-3.  **Data Ingestion:** With the VM running, I configured a VirtualBox Shared Folder to transfer the `tutorialdata` logs into the appliance. Inside the VM, I used `nano` to create a `ingest.yml` configuration file and then executed the **Filebeat** command to process the logs and send them to Wazuh:
-    `/usr/share/filebeat/bin/filebeat -c ingest.yml -e`
-
-4.  **Verification:** I navigated to the Wazuh dashboard in my web browser, went to the "Discover" tab, and set an absolute time range to include all historical data. The successful appearance of o
-
+## 📈 Results
+The project resulted in the successful ingestion and indexing of **109,867 security logs**. By resolving hardware-level virtualization errors and kernel-level software crashes, I demonstrated the ability to maintain and troubleshoot enterprise-grade security tools under realistic technical constraints.
 
 ## 📁 Files Included
-*   `[wazhu_setup.pdf]` - The formal vulnerability assessment and remediation strategy document.
+*   '[wazuh-setup.pdf]' - Formal technical report containing the full command history and success screenshots.
+
+*(Note: This activity was completed as part of the Google Cybersecurity Professional Certificate).*
