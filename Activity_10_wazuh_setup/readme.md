@@ -29,5 +29,3 @@ The project resulted in the successful ingestion and indexing of **109,867 secur
 
 ## 📁 Files Included
 *   '[wazuh-setup.pdf]' - Formal technical report containing the full command history and success screenshots.
-
-*(Note: This activity was completed as part of the Google Cybersecurity Professional Certificate).*
